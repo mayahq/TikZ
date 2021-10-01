@@ -1,0 +1,8 @@
+Flask
+Redis
+tensorflow
+image
+matplotlib
+pycairo
+pathos
+scipy
