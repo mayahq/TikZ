@@ -6,36 +6,37 @@ import io
 import pickle
 import tarfile
 
-def loadTar(handle = 'syntheticTrainingData.tar'):
-    print "Loading data from",handle
+
+def loadTar(handle="syntheticTrainingData.tar"):
+    print("Loading data from", handle)
     handle = tarfile.open(handle)
-    
+
     # just load everything into RAM - faster that way. screw you tar
     members = {}
     for member in handle:
-        if member.name == '.': continue
+        if member.name == ".":
+            continue
         stuff = handle.extractfile(member)
         members[member.name] = stuff.read()
         stuff.close()
     handle.close()
 
-    print "Loaded tar file into RAM: %d entries."%len(members)
+    print("Loaded tar file into RAM: %d entries." % len(members))
     return members
 
 
-def loadExamples(numberOfExamples, f = 'syntheticTrainingData.tar'):
+def loadExamples(numberOfExamples, f="syntheticTrainingData.tar"):
     members = loadTar(f)
-    programNames = [ "./randomScene-%d.p"%(j)
-                     for j in range(numberOfExamples) ]
-    programs = [ pickle.load(io.BytesIO(members[n])) for n in programNames ]
+    programNames = ["./randomScene-%d.p" % (j) for j in range(numberOfExamples)]
+    programs = [pickle.load(io.BytesIO(members[n])) for n in programNames]
 
-    print "Loaded pickles."
+    print("Loaded pickles.")
 
-    noisyTarget = [ "./randomScene-%d-noisy.png"%(j) for j in range(numberOfExamples) ]
+    noisyTarget = ["./randomScene-%d-noisy.png" % (j) for j in range(numberOfExamples)]
     for t in noisyTarget:
-        cacheImage(t,members[t])
+        cacheImage(t, members[t])
 
-    print "Loaded images."
+    print("Loaded images.")
 
     return noisyTarget, programs
 
@@ -58,7 +59,7 @@ def loadExamples(numberOfExamples, f = 'syntheticTrainingData.tar'):
 #         if not dummyImages:
 #             trace = loadImages(trace)
 #             noisyTarget = loadImage(noisyTarget)
-        
+
 #         targetImage = trace[-1]
 #         currentImage = "blankImage" if dummyImages else np.zeros(targetImage.shape)
 #         for k,l in enumerate(program.lines):
@@ -75,7 +76,7 @@ def loadExamples(numberOfExamples, f = 'syntheticTrainingData.tar'):
 #         targetLine.append(None)
 #         for j in target:
 #             target[j] += [STOP] # should be zero and therefore valid for everyone
-            
+
 #     targetVectors = [np.array(target[j]) for j in sorted(target.keys()) ]
 
 #     print "loaded images in",(time() - startTime),"s"
