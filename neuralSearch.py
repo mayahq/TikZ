@@ -4,7 +4,6 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torch.autograd import Variable
 import torch.optim as optimization
 import torch.cuda as cuda
 
@@ -46,7 +45,7 @@ class LineDecoder(nn.Module):
             t[0, j] = self.lexicon.index(s)
         if GPU:
             t = t.cuda()
-        return Variable(t)
+        return t
 
     def loss(self, target, seed):
         numberOfTargets = len(target)
@@ -144,7 +143,7 @@ class LineEncoder(nn.Module):
             t[0, j] = self.lexicon.index(s)
         if GPU:
             t = t.cuda()
-        return Variable(t)
+        return t
 
     def encoding(self, symbols, seed):
         return self(self.tensorOfSymbols(symbols), seed)

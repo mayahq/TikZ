@@ -7,7 +7,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optimization
 import torch.nn.functional as F
-from torch.autograd import Variable
 import torchvision.transforms as T
 
 
@@ -55,7 +54,7 @@ class SynthesisPolicy:  # nn.Module):
         self.inputDimensionality = len(SynthesisPolicy.featureExtractor(Sequence([])))
         self.outputDimensionality = 6
 
-        self.parameters = Variable(
+        self.parameters = torch.Tensor(
             torch.randn(self.outputDimensionality, self.inputDimensionality),
             requires_grad=True,
         )
@@ -76,7 +75,7 @@ class SynthesisPolicy:  # nn.Module):
 
     def scoreJobs(self, jobs):
         f = torch.from_numpy(SynthesisPolicy.featureExtractor(jobs[0].parse)).float()
-        f = Variable(f)
+        f = torch.FloatTensor(f)
         y = self.parameters.matmul(f)
         z = lse([y[3], y[4], y[5]])
         scores = []
@@ -163,7 +162,7 @@ class SynthesisPolicy:  # nn.Module):
                 break
 
         f = torch.from_numpy(SynthesisPolicy.featureExtractor(jobs[0].parse)).float()
-        f = Variable(f)
+        f = torch.FloatTensor(f)
         y = self.parameters.matmul(f)
         # z = lse([y[3],y[4],y[5]])
 
@@ -328,7 +327,7 @@ class SynthesisPolicy:  # nn.Module):
             f = torch.from_numpy(
                 SynthesisPolicy.featureExtractor(jobs[0].parse)
             ).float()
-            f = Variable(f)
+            f = torch.FloatTensor(f)
             y = F.sigmoid(self.parameters.matmul(f))
             incrementalScore = y.data[0]
             loopScore = y.data[1]

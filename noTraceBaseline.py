@@ -11,7 +11,6 @@ import pickle as pickle
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torch.autograd import Variable
 import torch.optim as optimization
 import torch.cuda as cuda
 from torch.nn.utils.rnn import pack_padded_sequence
@@ -26,7 +25,7 @@ def variable(x, volatile=False):
         x = torch.from_numpy(x)
     if GPU:
         x = x.cuda()
-    return Variable(x, volatile=volatile)
+    return torch.Tensor(x, volatile=volatile)
 
 
 LEXICON = [

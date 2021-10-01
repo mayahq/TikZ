@@ -249,7 +249,7 @@ def randomScene(maximumNumberOfObjects):
                 shapeIdentities = [choice(list(range(4))) for _ in range(n)]
                 numberOfLabels = len([i for i in shapeIdentities if i == 3])
                 # make it so that there are not too many labels
-                if numberOfLabels > n / 2:
+                if numberOfLabels > n // 2:
                     continue
 
             return multipleObjects(
@@ -271,10 +271,10 @@ def handleGeneration(arguments):
 
     os.system("mkdir %s/%d" % (outputName, startingPoint))
     makeSyntheticData(
-        "%s/%d/%s" % (outputName, startingPoint, n),
+        "%s/%d/%s" % (outputName, int(startingPoint), n),
         generators[n],
         k=k,
-        offset=startingPoint,
+        offset=int(startingPoint),
     )
     print("Generated %d training sequences into %s/%d" % (k, outputName, startingPoint))
 
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     else:
         totalNumberOfExamples = 100000
     examplesPerBatch = (
-        totalNumberOfExamples / 10
+        totalNumberOfExamples // 10
         if totalNumberOfExamples > 100
         else totalNumberOfExamples
     )
@@ -314,7 +314,7 @@ if __name__ == "__main__":
         offsetsAndCounts.append((n, startingPoint, kp))
         startingPoint += examplesPerBatch
     print(offsetsAndCounts)
-    workers = totalNumberOfExamples / examplesPerBatch
+    workers = int(totalNumberOfExamples / examplesPerBatch)
     if workers > 1:
         if workers > 10:
             workers = 10

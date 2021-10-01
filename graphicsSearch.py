@@ -9,7 +9,6 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
-from torch.autograd import Variable
 import torch.optim as optimization
 import torch.cuda as cuda
 from torch.nn.utils.rnn import pack_padded_sequence
@@ -46,9 +45,9 @@ class GraphicsSearchPolicy(SearchPolicy):
     def encodeProblem(self, s):
         if s == []:
             t = torch.from_numpy(np.zeros((self.H, 1))).float()
-            return Variable(t.cuda() if GPU else t)
+            return (t.cuda() if GPU else t)
         encodings = [
-            self.circleEncoder(Variable(t.cuda() if GPU else t)).clamp(min=0)
+            self.circleEncoder((t.cuda() if GPU else t)).clamp(min=0)
             for c in s
             for t in [torch.from_numpy(np.array([c.center.x, c.center.y])).float()]
         ]
